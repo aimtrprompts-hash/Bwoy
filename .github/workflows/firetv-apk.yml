@@ -1,0 +1,45 @@
+# Builds the Fire TV app (an installable .apk) in GitHub's cloud, so no Android Studio is needed.
+# Use: put this project in a GitHub repository, open the "Actions" tab, choose "Build Fire TV app", "Run workflow".
+# When it finishes (a few minutes), open the run and download "Hearth-FireTV" from the Artifacts list at the bottom.
+name: Build Fire TV app
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Build the web UI and copy it into the app
+        run: |
+          npm ci
+          npm run build:firetv
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Build the app
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug
+
+      - name: Keep the app
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk Hearth-FireTV.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Hearth-FireTV
+          path: Hearth-FireTV.apk
+          if-no-files-found: error

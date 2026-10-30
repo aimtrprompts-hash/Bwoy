@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.hearth.firetv'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.hearth.firetv'
+        // Fire OS 5 is Android 5.1 (API 22); the Fire TV Stick 4K on Fire OS 6 is Android 7.1 (API 25).
+        minSdk 22
+        // 25 = the Android the Fire TV Stick 4K runs. (Higher would add rules for background starts and storage that Fire OS 6 does not have.)
+        targetSdk 25
+        versionCode 1
+        versionName '1.2.0-firetv'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint {
+        // WRITE_SECURE_SETTINGS is a protected permission on purpose (it is granted once from a computer with adb)
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+// No libraries: the app is a thin shell around a WebView.
+dependencies {
+}

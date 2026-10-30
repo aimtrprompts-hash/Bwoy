@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hearth</string>
+    <string name="service_description">Opens Hearth when the Fire TV home screen appears, so Hearth works as your home screen. It only notices which app is in front; it does not read the screen.</string>
+</resources>
